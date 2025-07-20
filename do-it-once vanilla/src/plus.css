@@ -61,3 +61,38 @@
 .logs-container::-webkit-scrollbar-thumb:hover {
   background: #777;
 } 
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #fff;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.code-display {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.code-display pre {
+  margin: 0;
+}
+
+.code-display code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 14px;
+} 

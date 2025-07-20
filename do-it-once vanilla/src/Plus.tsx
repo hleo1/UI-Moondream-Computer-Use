@@ -7,6 +7,8 @@ import { Action } from './types';
 function Plus() {
   const [isRecording, setIsRecording] = useState(false);
   const [logs, setLogs] = useState<Action[]>([]);
+  const [postProcessingState, setPostProcessingState] = useState<'idle' | 'loading' | 'done'>('idle');
+  const [pythonCode, setPythonCode] = useState('');
 
   useEffect(() => {
     const cleanup = window.ipcRenderer.onNewLog((log) => {
@@ -19,27 +21,75 @@ function Plus() {
   const toggleRecording = () => {
     if (isRecording) {
       window.ipcRenderer.stopLogging();
+      postProcessing();
     } else {
       setLogs([]); // Clear logs on new recording
+      setPostProcessingState('idle');
+      setPythonCode('');
       window.ipcRenderer.startLogging();
     }
     setIsRecording(!isRecording);
   };
 
+  const postProcessing = () => {
+
+    
+    setPostProcessingState('loading');
+
+    fetch('https://646c40cd318a.ngrok-free.app/process', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: {} })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setPythonCode(data?.result?.code || '');
+        setPostProcessingState('done');
+      })
+      .catch(() => {
+        setPythonCode('# Error fetching code');
+        setPostProcessingState('done');
+      });
+    // setTimeout(() => {
+    //   const fetchedCode = 'print("hello world")';
+    //   setPythonCode(fetchedCode);
+    //   setPostProcessingState('done');
+    // }, 2000);
+  };
+
+  const renderContent = () => {
+    switch (postProcessingState) {
+      case 'loading':
+        return <div className="loading-spinner"></div>;
+      case 'done':
+        return (
+          <div className="code-display">
+            <pre><code>{pythonCode}</code></pre>
+          </div>
+        );
+      case 'idle':
+      default:
+        return (
+          <div className="logs-container">
+            {logs.map((log, index) => (
+              <LogEntry key={index} log={log} />
+            ))}
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="plus-container">
-      <h1>Activity Recorder</h1>
+      <h1>Skill Training</h1>
       <button
         onClick={toggleRecording}
         className="play-stop-button"
+        disabled={postProcessingState === 'loading'}
       >
         {isRecording ? '■' : '▶'}
       </button>
-      <div className="logs-container">
-        {logs.map((log, index) => (
-          <LogEntry key={index} log={log} />
-        ))}
-      </div>
+      {renderContent()}
     </div>
   );
 }
