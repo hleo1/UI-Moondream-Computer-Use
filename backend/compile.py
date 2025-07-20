@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+from calendar import c
 import os
 import sys
 from typing import Dict, Any, List, Optional
@@ -278,29 +279,21 @@ def step2(folder: str, prev_steps: List[str], user_query: str = "") -> str:
     
     return result
 
-def main():
-    """Main function to handle command line arguments and execute the five-step process"""
-    parser = argparse.ArgumentParser(description='Process a folder of screenshots in two analytical steps')
-    parser.add_argument('--folder', required=True, help='Path to folder containing screenshots')
-    parser.add_argument('--query', default='', help='Specific query or question to focus the analysis on')
-    parser.add_argument('--start-from', default=0, type=int)
-    
-    args = parser.parse_args()
-
+def compile(folder, query, start_from):
     cache = []
     if os.path.exists("cache.json"):
         with open("cache.json", "r") as r:
             cache = json.load(r)
     
     # Validate file paths
-    if not os.path.exists(args.folder):
-        print(f"Error: Folder not found: {args.folder}")
+    if not os.path.exists(folder):
+        print(f"Error: Folder not found: {folder}")
         sys.exit(1)
     
     print(f"Processing files:")
-    print(f"  Folder: {args.folder}")
-    if args.query:
-        print(f"  Query: {args.query}")
+    print(f"  Folder: {folder}")
+    if query:
+        print(f"  Query: {query}")
     print("\n" + "="*60 + "\n")
     
     # Execute the five steps
@@ -314,8 +307,8 @@ def main():
         return cache
     
     # Step 1
-    if args.start_from < 1 or len(cache) < 1:
-        result1 = step1(args.folder, args.query)
+    if start_from < 1 or len(cache) < 1:
+        result1 = step1(folder, query)
         results.append(result1)
         results[-1] += "\nANSWERS:\n\n" + "Follow my example to the best of your ability."
         cache = save_cache(cache, results[-1], 0)
@@ -323,8 +316,8 @@ def main():
         results.append(cache[0])
     
     # Step 2
-    if args.start_from < 2 or len(cache) < 2:
-        result2 = step2(args.folder, results, args.query)
+    if start_from < 2 or len(cache) < 2:
+        result2 = step2(folder, results, query)
         results.append(result2)
         cache = save_cache(cache, results[-1], 1)
     else:
@@ -334,7 +327,29 @@ def main():
         f.write(results[-1])
     
     print("=== PROCESS COMPLETE ===")
-    print("All five steps have been executed successfully.")
+
+    code = results[-1]
+    code_lines = code.split("\n")
+    code_lines = [line.strip() for line in code_lines if line.strip() != ""]
+    start_index = code_lines.index("start") + 1
+    end_index = code_lines.index("end")
+    code = "\n".join(code_lines[start_index:end_index])
+    code = code.strip()
+
+    code = "from grandmalib import *\nimport time\ntime.sleep(1)\n" + code
+
+    return code
+
+def main():
+    """Main function to handle command line arguments and execute the five-step process"""
+    parser = argparse.ArgumentParser(description='Process a folder of screenshots in two analytical steps')
+    parser.add_argument('--folder', required=True, help='Path to folder containing screenshots')
+    parser.add_argument('--query', default='', help='Specific query or question to focus the analysis on')
+    parser.add_argument('--start-from', default=0, type=int)
+    
+    args = parser.parse_args()
+
+    compile(args.folder, args.query, args.start_from)
 
 if __name__ == "__main__":
     main()
