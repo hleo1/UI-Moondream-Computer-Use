@@ -217,8 +217,8 @@ def step1(folder: str, user_query: str = "") -> str:
     <questions>
     """
 
-    with open(f"prompt_step_1_{time.time()}.txt", "w") as f:
-        f.write(prompt)
+    # with open(f"prompt_step_1_{time.time()}.txt", "w") as f:
+    #     f.write(prompt)
     
     result = query(prompt, folder)
     print("=== STEP 1: Initial Analysis ===")
@@ -265,10 +265,11 @@ def step2(folder: str, prev_steps: List[str], user_query: str = "") -> str:
     • If a lambda spans multiple lines, make sure its contents are wrapped in parentheses and each line ends with a comma.
     • Pay attention to the final screenshot to see the starting condition of the next step. It is not necessarily in the right starting position.
     • Return your response as a code block, formatted according to proper python syntax but only using the instructions provided.
+    • DO NOT USE SHELL OR POWERSHELL COMMANDS.
     """
     
-    with open(f"prompt_step_2_{time.time()}.txt", "w") as f:
-        f.write(prompt)
+    # with open(f"prompt_step_2_{time.time()}.txt", "w") as f:
+    #     f.write(prompt)
     
     result = query(prompt, folder)
     print("=== STEP 2: Producing Instructions ===")

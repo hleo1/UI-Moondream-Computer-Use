@@ -1,0 +1,29 @@
+```python
+# The sequence below relies entirely on keystrokes, so it works even if
+# window positions differ from machine to machine.
+# Prerequisites:
+#   • Windows OS
+#   • The .pptx file you want to convert sits in C:\Slides\presentation.pptx
+#   • PowerShell is available (default on Windows 10/11)
+#
+# Strategy:
+#   1. Open the Windows “Run” dialog (Win + R).
+#   2. Launch a one-liner PowerShell command that:
+#        - treats the .pptx as a normal zip archive
+#        - expands it into a sibling “_images” folder
+#        - the images will be inside “…\ppt\media”
+#
+# The command is:
+#   powershell -command "Expand-Archive -LiteralPath 'C:\Slides\presentation.pptx' -DestinationPath 'C:\Slides\presentation_images' -Force"
+
+start
+# 1) Open the Windows Run dialog
+hot_key('win', 'r')
+
+# 2) Type the PowerShell one-liner that extracts the images
+type_text("powershell -command \"Expand-Archive -LiteralPath 'C:\\Slides\\presentation.pptx' -DestinationPath 'C:\\Slides\\presentation_images' -Force\"")
+
+# 3) Execute the command
+hot_key('enter')
+end
+```

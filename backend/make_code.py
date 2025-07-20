@@ -1,1 +1,0 @@
-python compile.py --screenshot screenshot.png --scribehow manual.pdf --query "convert powerpoint slides of a bunch of images into a folder containing just the images from the powerpoint slide"
