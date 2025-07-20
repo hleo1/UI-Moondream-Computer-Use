@@ -1,0 +1,31 @@
+.log-entry-card {
+  background-color: #2E2E2E;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.log-header strong {
+  font-weight: bold;
+  color: #E0E0E0;
+}
+
+.log-header span {
+  font-size: 0.9em;
+  color: #A0A0A0;
+}
+
+.log-body p {
+  margin: 0;
+  font-size: 1em;
+  color: #C0C0C0;
+} 

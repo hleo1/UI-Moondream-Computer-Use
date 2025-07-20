@@ -1,0 +1,4 @@
+moondream
+matplotlib
+pygetwindow
+pyautogui
