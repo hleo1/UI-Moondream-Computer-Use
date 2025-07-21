@@ -1,0 +1,42 @@
+```python
+# NOTE:  These are high-level “skeleton” steps that follow the standard
+#        PowerPoint workflow:
+#            1)  F12  →  Save As dialog
+#            2)  Pick “PNG” in the “Save as type” dropdown
+#            3)  Save
+#            4)  When prompted, choose “All Slides”
+#
+#        Co-ordinates are expressed as ratios (0–1) of the full screen.
+#        You may fine-tune them once you know the exact monitor / window
+#        layout.  The same logic works for one presentation at a time;
+#        wrap it in a loop if you later want to process multiple files.
+
+start
+# --- make sure the PowerPoint window is active --------------------------------
+move_to((0.50, 0.08))      # click somewhere in the ribbon area
+left_click()
+
+# --- open “Save As” ------------------------------------------------------------
+hot_key('f12')             # F12  is the quickest way to open the Save-As box
+
+# --- choose PNG as the output format ------------------------------------------
+# click the “Save as type” dropdown (usually bottom-right of the dialog)
+move_to((0.72, 0.88))
+left_click()
+
+# press “p” — the first PNG entry is usually selected immediately
+type_text('p')
+hot_key('enter')           # confirm the PNG choice
+
+# --- save the file -------------------------------------------------------------
+# click the Save button (bottom-right)
+move_to((0.92, 0.88))
+left_click()
+
+# --- when PowerPoint asks “All slides / Just this one” -------------------------
+move_to((0.58, 0.60))      # “All Slides” button is normally centred
+left_click()
+
+# the slides are now exported to  <presentation-name> Folder\Slide1.png, …
+end
+```

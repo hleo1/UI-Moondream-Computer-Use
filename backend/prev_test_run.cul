@@ -1,0 +1,96 @@
+```python
+# These instructions demonstrate one simple, reliable GUI-only way
+# to turn every slide of a PowerPoint file into individual image
+# files (PNG).  It relies on the built-in “Save As → PNG” feature
+# of Microsoft PowerPoint, requires Windows, and assumes that
+#  (1) File Explorer is already open and showing the folder that
+#      contains one or more .pptx files,
+#  (2) The first .pptx file in the list is pre-selected, and
+#  (3) Microsoft PowerPoint is installed and will be launched when
+#      the .pptx file is opened.
+#
+# The macro opens each presentation, invokes  F12  (Save As),
+# changes “Save as type” to PNG, saves *all* slides (PowerPoint
+# automatically creates a new sub-folder named “<file> PNG Images”),
+# closes the presentation, then moves on to the next .pptx until
+# no more files remain.
+
+start
+
+#-------------------------------------------------------------------
+# 1) Make sure the File-Explorer window is focused
+#-------------------------------------------------------------------
+move_to((0.02, 0.10))      # click somewhere in the file-list pane
+left_click()
+
+#-------------------------------------------------------------------
+# 2) Process every .pptx file that is present
+#-------------------------------------------------------------------
+loop(
+    lambda: (
+        # --- Break the loop when there are no more items below the
+        #     current selection (PgDn returns False when nothing
+        #     changes).  We peek with page_down()/page_up().
+        if_else(
+            lambda: not page_down(),       # nothing happened?
+            lambda: (
+                break_loop(),              # we are done
+            ),
+            lambda: (
+                page_up(),                 # revert test scroll
+            ),
+        ),
+
+        # ----------------------------------------------------------
+        # A) Open the currently-selected presentation
+        # ----------------------------------------------------------
+        hot_key('enter'),
+
+        # --- Give the new PowerPoint window focus by clicking its
+        #     title-bar region (approx. top-centre of the screen).
+        move_to((0.50, 0.03))
+        ,
+        left_click(),
+
+        # ----------------------------------------------------------
+        # B) “Save As” PNG – quickest is simply pressing  F12
+        # ----------------------------------------------------------
+        hot_key('f12'),                    # open Save-As dialog
+
+        # The following TAB sequence lands on the
+        # “Save as type” drop-down irrespective of the dialog's
+        # variant (usually 7 × TAB does it on Win11/Office365).
+        hot_key('tab'); hot_key('tab'); hot_key('tab');
+        hot_key('tab'); hot_key('tab'); hot_key('tab'); hot_key('tab'),
+
+        # Open the file-type list and jump to “PNG”
+        hot_key('alt', 'down'),
+        type_text('png'),                  # quick-jump by typing
+        hot_key('enter'),
+
+        # Hit  Enter  to save
+        hot_key('enter'),
+
+        # When asked “All Slides / Just This One”, press  Enter
+        # again to accept the default “All Slides”.
+        hot_key('enter'),
+
+        # ----------------------------------------------------------
+        # C) Close the presentation and return to Explorer
+        # ----------------------------------------------------------
+        hot_key('alt', 'f4'),
+
+        # Bring Explorer back to the foreground by clicking its
+        # task-bar icon (bottom-centre-ish on a standard layout).
+        move_to((0.50, 0.97)),
+        left_click(),
+
+        # ----------------------------------------------------------
+        # D) Select the next file in the list
+        # ----------------------------------------------------------
+        hot_key('down'),
+    ),
+)
+
+end
+```
