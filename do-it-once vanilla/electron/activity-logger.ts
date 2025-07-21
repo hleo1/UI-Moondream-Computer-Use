@@ -5,7 +5,7 @@ import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
 import { EventEmitter } from 'events';
-import { Action } from '../src/types';
+import { Action } from './types';
 
 const clicksVicinityDir = path.join(process.cwd(), 'clicks_vicinity');
 const screenshotFullDir = path.join(process.cwd(), 'screenshot_full');

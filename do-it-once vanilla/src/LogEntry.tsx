@@ -1,5 +1,5 @@
 import React from 'react';
-import { Action, ClickAction, KeyPressAction, ComboKeyPressAction, MoveMouseAction } from './types';
+import { Action, ClickAction, KeyPressAction, ComboKeyPressAction, MoveMouseAction } from '../electron/types';
 import './LogEntry.css';
 
 interface LogEntryProps {

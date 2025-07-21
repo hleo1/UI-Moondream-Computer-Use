@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './transparent-body.css';
 import './plus.css';
 import LogEntry from './LogEntry';
-import { Action } from './types';
+import { Action } from '../electron/types';
 
 function Plus() {
   const [isRecording, setIsRecording] = useState(false);
@@ -31,25 +31,53 @@ function Plus() {
     setIsRecording(!isRecording);
   };
 
-  const postProcessing = () => {
+  const postProcessing = async () => {
 
     
     setPostProcessingState('loading');
 
-    fetch('https://646c40cd318a.ngrok-free.app/process', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: {} })
-    })
-      .then(res => res.json())
-      .then(data => {
-        setPythonCode(data?.result?.code || '');
-        setPostProcessingState('done');
-      })
-      .catch(() => {
-        setPythonCode('# Error fetching code');
-        setPostProcessingState('done');
+    try {
+      console.log("1")
+      const response = await fetch('https://646c40cd318a.ngrok-free.app/process', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({ data: {} })
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      console.log("2")
+
+      const result = await response.json();
+      console.log('Response:', result);
+      setPostProcessingState('done');
+      return result;
+    } catch (error) {
+      console.error('Error:', error);
+      setPostProcessingState('done');
+      throw error;
+    }
+    // fetch('https://646c40cd318a.ngrok-free.app/process', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ data: {} })
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     setPythonCode(data?.result?.code || '');
+    //     setPostProcessingState('done');
+    //   })
+    //   .catch((err) => {
+    //     console.error('Error fetching code:', err);
+    //     setPythonCode(`# Error fetching code\n${err?.message || err}`);
+    //     setPostProcessingState('done');
+    //   });
     // setTimeout(() => {
     //   const fetchedCode = 'print("hello world")';
     //   setPythonCode(fetchedCode);
