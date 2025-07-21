@@ -1,6 +1,11 @@
+import RobotJSActions from './implementation';
+
 // JSON Schemas for actions
 export abstract class Action<T extends string = string> {
     protected constructor(public action: T, public time: number) {}
+    public doAction() {
+        RobotJSActions.executeAction(this as unknown as AnyAction);
+    }   
 }
 
 export class Position {

@@ -1,0 +1,27 @@
+[
+  {
+    "action": "keyPress",
+    "key": "J",
+    "time": 1753131735228
+  },
+  {
+    "action": "keyPress",
+    "key": "K",
+    "time": 1753131736531
+  },
+  {
+    "action": "keyPress",
+    "key": "L",
+    "time": 1753131737718
+  },
+  {
+    "action": "Combo Key",
+    "combo": "Ctrl + A",
+    "time": 1753131738915
+  },
+  {
+    "action": "Combo Key",
+    "combo": "Ctrl + C",
+    "time": 1753131740853
+  }
+]
